@@ -6,7 +6,8 @@ const contactValidation = (schema) => {
     if (!req._body) {
       throw HttpError(400, "Missing fields");
     } else if (error) {
-      next(HttpError(400, `Missing required ${error} field`));
+      console.log(error);
+      next(HttpError(400, `Missing required ${error.details[0].path} field`));
     }
     next();
   };
