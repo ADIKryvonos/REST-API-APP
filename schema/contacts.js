@@ -9,8 +9,14 @@ const Schema = Joi.object({
       tlds: { allow: ["com", "net", "ua"] },
     }),
   phone: Joi.number().integer().required(),
+  favorite: Joi.boolean(),
+});
+
+const FavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
 });
 
 module.exports = {
   Schema,
+  FavoriteSchema,
 };

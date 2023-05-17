@@ -1,11 +1,10 @@
 const { HttpError } = require("../helpers");
 
-const contactValidation = (schema) => {
+const favoriteValidation = (schema) => {
   const func = (req, res, next) => {
     const { error } = schema.validate(req.body);
     if (!req._body) {
-      console.log(req);
-      throw HttpError(400, `Missing fields`);
+      throw HttpError(400, `Missing field favorite`);
     } else if (error) {
       console.log(error);
       next(HttpError(400, `Missing required ${error.details[0].path} field`));
@@ -16,4 +15,4 @@ const contactValidation = (schema) => {
   return func;
 };
 
-module.exports = contactValidation;
+module.exports = favoriteValidation;
