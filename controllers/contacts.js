@@ -1,8 +1,10 @@
 const { HttpError, tryCatchDecorator } = require("../helpers");
+
+const Contact = require("../models/contact");
 const contacts = require("../models/contacts");
 
 const getAllContacts = async (req, res) => {
-  const result = await contacts.listContacts();
+  const result = await Contact.find();
   res.json(result);
 };
 
