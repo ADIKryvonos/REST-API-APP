@@ -1,14 +1,15 @@
 const { HttpError, tryCatchDecorator } = require("../helpers");
-const contacts = require("../models/contacts");
+
+const Contact = require("../models/contact");
 
 const getAllContacts = async (req, res) => {
-  const result = await contacts.listContacts();
+  const result = await Contact.find({}, "-updatedAt");
   res.json(result);
 };
 
 const getContactById = async (req, res, next) => {
   const { id } = req.params;
-  const contact = await contacts.getContactById(id);
+  const contact = await Contact.findById(id);
   if (!contact) {
     throw HttpError(404, "Not found");
   }
@@ -16,13 +17,13 @@ const getContactById = async (req, res, next) => {
 };
 
 const addNewContact = async (req, res) => {
-  const newContact = await contacts.addContact(req.body);
+  const newContact = await Contact.create(req.body);
   res.status(201).json(newContact);
 };
 
 const deleteContact = async (req, res) => {
   const { id } = req.params;
-  const deleted = await contacts.removeContact(id);
+  const deleted = await Contact.findByIdAndRemove(id);
   if (!deleted) {
     throw HttpError(404, "Not found");
   }
@@ -31,7 +32,16 @@ const deleteContact = async (req, res) => {
 
 const changeContact = async (req, res) => {
   const { id } = req.params;
-  const update = await contacts.updateContact(id, req.body);
+  const update = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+  if (!update) {
+    throw HttpError(404, "Not found");
+  }
+  res.json(update);
+};
+
+const changeFavorite = async (req, res) => {
+  const { id } = req.params;
+  const update = await Contact.findByIdAndUpdate(id, req.body, { new: true });
   if (!update) {
     throw HttpError(404, "Not found");
   }
@@ -44,4 +54,5 @@ module.exports = {
   addNewContact: tryCatchDecorator(addNewContact),
   deleteContact: tryCatchDecorator(deleteContact),
   changeContact: tryCatchDecorator(changeContact),
+  changeFavorite: tryCatchDecorator(changeFavorite),
 };
