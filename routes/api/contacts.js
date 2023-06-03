@@ -5,24 +5,32 @@ const {
   contactValidation,
   idValidation,
   favoriteValidation,
+  authentication,
 } = require("../../middlewares");
 
 const router = express.Router();
 
 const func = require("../../controllers/contacts");
 
-router.get("/", func.getAllContacts);
+router.get("/", authentication, func.getAllContacts);
 
-router.get("/:id", idValidation, func.getContactById);
+router.get("/:id", authentication, idValidation, func.getContactById);
 
-router.post("/", contactValidation(Schema), func.addNewContact);
+router.post("/", authentication, contactValidation(Schema), func.addNewContact);
 
-router.delete("/:id", idValidation, func.deleteContact);
+router.delete("/:id", authentication, idValidation, func.deleteContact);
 
-router.put("/:id", idValidation, contactValidation(Schema), func.changeContact);
+router.put(
+  "/:id",
+  authentication,
+  idValidation,
+  contactValidation(Schema),
+  func.changeContact
+);
 
 router.patch(
   "/:id/favorite",
+  authentication,
   idValidation,
   favoriteValidation(FavoriteSchema),
   func.changeFavorite
