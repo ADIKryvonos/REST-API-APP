@@ -17,6 +17,14 @@ router.post(
   controller.registerUser
 );
 
+router.get("/verify/:verificationToken", controller.verifyUser);
+
+router.post(
+  "/verify",
+  contactValidation(schemas.verifySchema),
+  controller.resendVerifyUser
+);
+
 router.post(
   "/login",
   contactValidation(schemas.logInSchema),
